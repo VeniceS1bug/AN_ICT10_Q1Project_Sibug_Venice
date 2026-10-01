@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dolce Venice - Receipt Generator</title>
+
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.2.4/core.css">
+    <script type="module" src="https://pyscript.net/releases/2025.2.4/core.js"></script>
+
+    <style>
+        body {
+            background-color: #172775;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #172775;
+            padding: 20px 0;
+            border-bottom: 2px solid #fffdd0;
+        }
+
+        .navbar {
+            text-align: center;
+        }
+
+        .navbar h2 {
+            color: #FFDA7B;
+            font-size: 50px;
+            margin: 5px 0 15px 0;
+            font-family: cursive;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            color: #172775;
+            background-color: #fffdd0;
+            text-decoration: none;
+            margin: 0 8px;
+            padding: 8px 16px;
+            font-size: 16px;
+            border: 1px solid #fffdd0;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            background-color: #172775;
+            color: #fffdd0;
+        }
+
+        .nav-links a.active {
+            background-color: #FFDA7B;
+            color: #172775;
+            font-weight: bold;
+        }
+
+        .welcome {
+            text-align: center;
+            color: white;
+            margin: 40px 20px;
+        }
+
+        .welcome h1 {
+            color: #fffdd0;
+            font-size: 40px;
+            font-family: cursive;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            font-size: 17px;
+        }
+
+        .sku-container {
+            background-color: #fffdd0;
+            width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .sku-container h2 {
+            color: #172775;
+            font-family: cursive;
+        }
+
+        .sku-container input[type="text"],
+        .sku-container select {
+            padding: 8px;
+            width: 250px;
+            font-family: inherit;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px auto;
+            width: 320px;
+            color: #172775;
+            text-align: left;
+        }
+
+        .menu-item input[type="number"] {
+            width: 50px;
+            padding: 6px;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .price {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .sku-container button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #172775;
+            color: #fffdd0;
+            border: none;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .sku-container button:hover {
+            background-color: #24378c;
+        }
+
+        #result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid black;
+        }
+
+        #result-container h2 {
+            color: #172775;
+            font-family: cursive;
+        }
+
+        #result {
+            color: #172775;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="navbar">
+            <h2>Dolce Venice</h2>
+
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="sku.html">SKU Generator</a>
+                <a href="receipt.html" class="active">Receipt Generator</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="welcome">
+        <h1>Receipt Generator</h1>
+        <p>Create a receipt for your Dolce Venice order.</p>
+    </div>
+
+    <div class="sku-container">
+
+        <label for="customer_name">Customer Name:</label>
+        <br><br>
+        <input type="text" id="customer_name" placeholder="Enter customer name">
+
+        <h2>Menu</h2>
+
+        <div class="menu-item">
+            <label>Cioccolato Fondente</label>
+            <div>
+                <span class="price">₱480</span>
+                <input type="number" id="item1" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <label>Cioccolato al Latte</label>
+            <div>
+                <span class="price">₱450</span>
+                <input type="number" id="item2" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <label>Cioccolato Bianco</label>
+            <div>
+                <span class="price">₱450</span>
+                <input type="number" id="item3" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <label>Caramello Salato</label>
+            <div>
+                <span class="price">₱520</span>
+                <input type="number" id="item4" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <label>Pistacchio</label>
+            <div>
+                <span class="price">₱550</span>
+                <input type="number" id="item5" min="0" value="0">
+            </div>
+        </div>
+
+        <button py-click="create_order">Generate Receipt</button>
+
+        <div id="result-container">
+            <h2>Order Summary</h2>
+            <div id="result">Your receipt will appear here.</div>
+        </div>
+
+        <script type="py" src="./receipt.py"></script>
+
+    </div>
+
+</body>
+</html>
